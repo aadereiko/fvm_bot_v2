@@ -11,6 +11,8 @@ Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
 import logging
+
+import settings
 from settings import fvm_token
 import main
 import reg
@@ -84,7 +86,14 @@ def run_bot() -> None:
     dispatcher.add_handler(unknown_handler)
 
     # Start the Bot
-    updater.start_polling()
+
+    if settings.is_local:
+        updater.start_polling()
+    else:
+        updater.start_webhook(listen="0.0.0.0",
+                              port=settings.PORT,
+                              url_path=settings.fvm_token,
+                              webhook_url="https://fvmbotv2.herokuapp.com/" + settings.fvm_token)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since

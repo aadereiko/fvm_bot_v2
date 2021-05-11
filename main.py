@@ -19,5 +19,5 @@ def start(update: Update, _: CallbackContext) -> int:
     reply_keyboard = [['Регистрация']]
     update.message.reply_text(
         'Какой-то там текст',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True),
     )

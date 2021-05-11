@@ -53,7 +53,8 @@ def name(update: Update, context: CallbackContext) -> int:
 
     update.message.reply_text(
         'Приятно познакомиться! Теперь, пожалуйста, выберите в каком формате Вы планируете участвовать?' + options_msg,
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+                                         resize_keyboard=True),
         parse_mode = "HTML"
     )
 
@@ -71,7 +72,7 @@ def is_online(update: Update, context: CallbackContext) -> int:
         'Прекрасно!\n'
         'А сейчас можете выбрать транспорт, на котором Вы планируете принимать участие' + options_msg,
         parse_mode="HTML",
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, parse_mode="HTML"),
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True),
     )
 
     return TRANSPORT
@@ -118,7 +119,8 @@ def age(update: Update, context: CallbackContext) -> int:
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Участвовали ли Вы ранее в фотовело?' + options_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+                                                               resize_keyboard=True),
                               parse_mode="HTML"
                               )
 
@@ -133,7 +135,9 @@ def has_participated(update: Update, context: CallbackContext) -> int:
 
     reply_keyboard = [['Телефон', 'Фотоаппарат']]
     update.message.reply_text('Вы планируете делать фото с помощью телефона или камеры?' + options_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard,
+                                                               one_time_keyboard=True,
+                                                               resize_keyboard=True),
                               parse_mode="HTML"
                               )
 
@@ -178,7 +182,8 @@ def how_met(update: Update, context: CallbackContext) -> int:
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Стоит ли печатать Вам продукцию на бумаге?' + options_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+                                                               resize_keyboard=True),
                               parse_mode="HTML")
 
     return IS_PAPER
@@ -192,7 +197,8 @@ def is_paper(update: Update, context: CallbackContext) -> int:
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Знаете ли Вы, что в мероприятии можно принимать участие только в Минске?' + options_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True),
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+                                                               resize_keyboard=True),
                               parse_mode="HTML")
 
     return TOWN
@@ -211,7 +217,8 @@ def town(update: Update, context: CallbackContext) -> int:
                               '2. Участник сам несет ответственность за себя и свое здоровье.\n\n'
                               'Завершить регистрацию?' + options_msg,
                               parse_mode="HTML",
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+                                                               resize_keyboard=True))
 
     return RIGHTS
 
@@ -228,8 +235,8 @@ def rights(update: Update, context: CallbackContext) -> int:
         if db.write_user_to_db(context.user_data):
             settings.bot.send_message(chat_id=settings.ader_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
-            settings.bot.send_message(chat_id=settings.marika_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
-                                                            f" успешно зарегистрирован!", parse_mode="HTML")
+            # settings.bot.send_message(chat_id=settings.marika_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
+            #                                                 f" успешно зарегистрирован!", parse_mode="HTML")
     elif update.message.text == "Нет":
         update.message.reply_text('Очень жаль, надеюсь, что Вы еще захотите ко мне вернуться 🤖',
                                   reply_markup=ReplyKeyboardRemove())

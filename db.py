@@ -1,3 +1,5 @@
+import ssl
+
 import pymongo
 import logging
 
@@ -7,7 +9,9 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-client = pymongo.MongoClient("mongodb+srv://aadereiko:90a12345@cluster0.r2ych.mongodb.net/fvm_users?retryWrites=true&w=majority")
+client = pymongo.MongoClient(
+    "mongodb+srv://aadereiko:90a12345@cluster0.r2ych.mongodb.net/fvm?retryWrites=true&w=majority",
+    ssl_cert_reqs=ssl.CERT_NONE)
 db = client.users_fvm
 
 
@@ -26,7 +30,10 @@ def write_user_to_db(user):
             "occupation": user["occupation"],
             "how_met": user["how_met"],
             "is_paper": user["is_paper"],
-            "is_town": user["is_town"]
+            "is_town": user["is_town"],
+            "user_id": user["user_id"],
+            "username": user["username"],
+            "tg_name": user["tg_name"]
         })
     except Exception as e:
         logging.error(e)
