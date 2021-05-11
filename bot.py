@@ -17,7 +17,7 @@ from settings import fvm_token
 import main
 import reg
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -39,14 +39,12 @@ def cancel(update: Update, _: CallbackContext) -> int:
     user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
     update.message.reply_text(
-        'Bye! I hope we can talk again some day.'
+        'Очень жаль! Надеюсь, что Вы к нам вернетесь.',
+        reply_markup=ReplyKeyboardMarkup(main.msgs_keyboard, one_time_keyboard=True, resize_keyboard=True),
+
     )
 
     return ConversationHandler.END
-
-
-def unknown(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Извините, я не понял эту команду.")
 
 
 def run_bot() -> None:
@@ -56,9 +54,25 @@ def run_bot() -> None:
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     start_handler = CommandHandler('start', main.start)
-    unknown_handler = MessageHandler(Filters.command, unknown)
+    contacts_handler = CommandHandler('contacts', main.contacts_cmd)
+    info_handler = CommandHandler('info', main.info_cmd)
+    unknown_handler = MessageHandler(Filters.command, main.unknown_cmd)
+
+    inst_handler_msg = MessageHandler(Filters.regex('Инст'), main.inst_cmd)
+    inst_handler_cmd = CommandHandler('inst', main.inst_cmd)
+
+    vk_handler_msg = MessageHandler(Filters.regex('ВК'), main.vk_cmd)
+    vk_handler_cmd = CommandHandler('vk', main.vk_cmd)
+
+    web_handler_msg = MessageHandler(Filters.regex('Сайт'), main.web_cmd)
+    web_handler_cmd = CommandHandler('web', main.web_cmd)
+
+    tg_handler_msg = MessageHandler(Filters.regex('Телеграм'), main.tg_cmd)
+    tg_handler_cmd = CommandHandler('tg', main.tg_cmd)
+
+    error_handler_msg = MessageHandler(Filters.regex('Ошибка / Вопрос'), main.err_cmd)
+    error_handler_cmd = CommandHandler('error', main.err_cmd)
 
     conv_handler = ConversationHandler(
         entry_points=[MessageHandler(Filters.regex('^Регистрация$'), reg.register)],
@@ -81,9 +95,27 @@ def run_bot() -> None:
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
+
     dispatcher.add_handler(start_handler)
+
+    dispatcher.add_handler(inst_handler_msg)
+    dispatcher.add_handler(inst_handler_cmd)
+    dispatcher.add_handler(vk_handler_msg)
+    dispatcher.add_handler(vk_handler_cmd)
+    dispatcher.add_handler(web_handler_msg)
+    dispatcher.add_handler(web_handler_cmd)
+    dispatcher.add_handler(tg_handler_msg)
+    dispatcher.add_handler(tg_handler_cmd)
+    dispatcher.add_handler(error_handler_msg)
+    dispatcher.add_handler(error_handler_cmd)
+
     dispatcher.add_handler(conv_handler)
+    dispatcher.add_handler(contacts_handler)
+    dispatcher.add_handler(info_handler)
+
+    # should be last one
     dispatcher.add_handler(unknown_handler)
+
 
     # Start the Bot
 
