@@ -7,7 +7,7 @@ import os
 
 # prod
 is_local = False
-fvm_token = "1824615819:AAFu0XQWQJHDgYu2cYt7SH1tKdPlzCZUxF4"
+fvm_token = "1878300171:AAHY46uiONwVy_a7QQFcouj6S0v68MLQVcc"
 PORT = int(os.environ.get('PORT', '8443'))
 
 marika_id = "399887481"
