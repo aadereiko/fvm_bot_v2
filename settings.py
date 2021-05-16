@@ -2,12 +2,12 @@ from telegram import Bot
 import os
 
 # local
-# is_local = True
-# fvm_token = "1369098570:AAEGEKqSjXgHXrX3Gkk0_YmV0QOnuiHEtko"
+is_local = True
+fvm_token = "1369098570:AAEGEKqSjXgHXrX3Gkk0_YmV0QOnuiHEtko"
 
 # prod
-is_local = False
-fvm_token = "1878300171:AAHY46uiONwVy_a7QQFcouj6S0v68MLQVcc"
+# is_local = False
+# fvm_token = "1878300171:AAHY46uiONwVy_a7QQFcouj6S0v68MLQVcc"
 PORT = int(os.environ.get('PORT', '8443'))
 
 marika_id = "399887481"

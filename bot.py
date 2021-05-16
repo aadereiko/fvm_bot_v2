@@ -16,6 +16,7 @@ import settings
 from settings import fvm_token
 import main
 import reg
+import users
 
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
@@ -74,6 +75,8 @@ def run_bot() -> None:
     error_handler_msg = MessageHandler(Filters.regex('Ошибка / Вопрос'), main.err_cmd)
     error_handler_cmd = CommandHandler('error', main.err_cmd)
 
+    users_handler_cmd = CommandHandler('users', users.users_cmd)
+
     conv_handler = ConversationHandler(
         entry_points=[MessageHandler(Filters.regex('^Регистрация$'), reg.register)],
         states={
@@ -108,6 +111,8 @@ def run_bot() -> None:
     dispatcher.add_handler(tg_handler_cmd)
     dispatcher.add_handler(error_handler_msg)
     dispatcher.add_handler(error_handler_cmd)
+
+    dispatcher.add_handler(users_handler_cmd)
 
     dispatcher.add_handler(conv_handler)
     dispatcher.add_handler(contacts_handler)

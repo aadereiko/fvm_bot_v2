@@ -2,6 +2,7 @@ import ssl
 
 import pymongo
 import logging
+from datetime import datetime
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -33,9 +34,19 @@ def write_user_to_db(user):
             "town": user["town"],
             "user_id": user["user_id"],
             "username": user["username"],
-            "tg_name": user["tg_name"]
+            "tg_name": user["tg_name"],
+            "reg_time": datetime.now(),
         })
     except Exception as e:
         logging.error(e)
         return False
     return True
+
+
+def get_all_users():
+    try:
+        users = db.users.find({})
+        return users
+    except Exception as e:
+        logging.error(e)
+        return False
