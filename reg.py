@@ -197,10 +197,8 @@ def is_paper(update: Update, context: CallbackContext) -> int:
 
     context.user_data['is_paper'] = update.message.text == "Да"
 
-    reply_keyboard = [['Да', 'Нет']]
-    update.message.reply_text('Знаете ли Вы, что в мероприятии можно принимать участие только в Минске?' + options_msg + stop_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
-                                                               resize_keyboard=True),
+    update.message.reply_text('В каком городе Вы планируете принимать участие?' + stop_msg,
+                              reply_markup=ReplyKeyboardRemove(),
                               parse_mode="HTML")
 
     return TOWN
@@ -208,9 +206,9 @@ def is_paper(update: Update, context: CallbackContext) -> int:
 
 def town(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
-    logger.info("is town ok for %s is %s", user.first_name, update.message.text)
+    logger.info("town for %s is %s", user.first_name, update.message.text)
 
-    context.user_data['is_town'] = update.message.text == "Да"
+    context.user_data['town'] = update.message.text
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Всю написанную здесь информацию Вы можете изменить позже, я дам об этом знать.\n\n'
@@ -230,15 +228,18 @@ def rights(update: Update, context: CallbackContext) -> int:
     logger.info("user %s is agreed with rights %s", user.first_name, update.message.text)
 
     if update.message.text == "Да":
-        update.message.reply_text('Спасибо, регистрация окончена, скоро свяжемся с Вами 🤖',
-                                  reply_markup=ReplyKeyboardRemove())
-        logger.info("User %s finished registration", user.first_name)
-
         if db.write_user_to_db(context.user_data):
             settings.bot.send_message(chat_id=settings.ader_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
             settings.bot.send_message(chat_id=settings.marika_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
+            update.message.reply_text('Спасибо, регистрация окончена, скоро свяжемся с Вами 🤖',
+                                      reply_markup=ReplyKeyboardRemove())
+            logger.info("User %s finished registration", user.first_name)
+        else:
+            update.message.reply_text('К сожалению, регистрация не окончена, '
+                                      'попробуйте еще чере пару минут или напишите @aadereiko',
+                                      reply_markup=ReplyKeyboardRemove())
     elif update.message.text == "Нет":
         update.message.reply_text('Очень жаль, надеюсь, что Вы еще захотите ко мне вернуться 🤖',
                                   reply_markup=ReplyKeyboardRemove())

@@ -30,7 +30,7 @@ def write_user_to_db(user):
             "occupation": user["occupation"],
             "how_met": user["how_met"],
             "is_paper": user["is_paper"],
-            "is_town": user["is_town"],
+            "town": user["town"],
             "user_id": user["user_id"],
             "username": user["username"],
             "tg_name": user["tg_name"]
