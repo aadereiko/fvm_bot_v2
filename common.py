@@ -5,7 +5,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def format_user_name_reg_time(users):
+def format_users_list(users):
     result = ""
     i = 0
 
