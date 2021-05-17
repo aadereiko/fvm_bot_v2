@@ -81,7 +81,7 @@ def run_bot() -> None:
         entry_points=[MessageHandler(Filters.regex('^Регистрация$'), reg.register)],
         states={
             reg.NAME: [MessageHandler(Filters.text & ~Filters.command, reg.name)],
-            reg.IS_ONLINE: [MessageHandler(Filters.regex('^(Онлайн|Оффлайн)$'), reg.is_online)],
+            reg.IS_ONLINE: [MessageHandler(Filters.regex('^(Онлайн|Офлайн)$'), reg.is_online)],
             reg.TRANSPORT: [MessageHandler(Filters.regex('^(Велосипед|Самокат|Электросамокат|Ролики|Скейтборд|Бег)$'), reg.transport)],
             reg.PHONE: [
                 MessageHandler(Filters.text & ~Filters.command, reg.phone),
@@ -89,7 +89,7 @@ def run_bot() -> None:
             ],
             reg.AGE: [MessageHandler(Filters.text & ~Filters.command, reg.age)],
             reg.HAS_PARTICIPATED: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.has_participated)],
-            reg.IS_PHONE: [MessageHandler(Filters.regex('^(Телефон|Фотоаппарат)$'), reg.is_phone)],
+            reg.IS_PHONE: [MessageHandler(Filters.regex('^(Телефон|Фотоаппарат|Телефон и фотоаппарат)$'), reg.is_phone)],
             reg.OCCUPATION: [MessageHandler(Filters.text & ~Filters.command, reg.occupation)],
             reg.HOW_MET: [MessageHandler(Filters.text & ~Filters.command, reg.how_met)],
             reg.IS_PAPER: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.is_paper)],

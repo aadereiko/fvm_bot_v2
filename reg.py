@@ -48,7 +48,7 @@ def register(update: Update, context: CallbackContext) -> int:
 
 def name(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
-    reply_keyboard = [['Онлайн', 'Оффлайн']]
+    reply_keyboard = [['Онлайн', 'Офлайн']]
     logger.info("Name of %s: %s", user.first_name, update.message.text)
 
     context.user_data['name'] = update.message.text
@@ -135,7 +135,7 @@ def has_participated(update: Update, context: CallbackContext) -> int:
 
     context.user_data['has_participated'] = update.message.text == "Да"
 
-    reply_keyboard = [['Телефон', 'Фотоаппарат']]
+    reply_keyboard = [['Телефон', 'Фотоаппарат'], ['Телефон и фотоаппарат']]
     update.message.reply_text('Вы планируете делать фото с помощью телефона или камеры?' + options_msg + stop_msg,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard,
                                                                one_time_keyboard=True,
@@ -198,7 +198,7 @@ def is_paper(update: Update, context: CallbackContext) -> int:
     context.user_data['is_paper'] = update.message.text == "Да"
 
     reply_keyboard = [['Да']]
-    update.message.reply_text('Знаете ли Вы, что в режиме оффлайн можно участвовать только в Минске?' + stop_msg,
+    update.message.reply_text('Знаете ли Вы, что в режиме офлайн можно участвовать только в Минске?' + stop_msg,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
                                                                resize_keyboard=True),
                               parse_mode="HTML")
@@ -235,8 +235,10 @@ def rights(update: Update, context: CallbackContext) -> int:
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
             settings.bot.send_message(chat_id=settings.marika_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
-            update.message.reply_text('Спасибо, регистрация окончена, скоро свяжемся с Вами 🤖',
-                                      reply_markup=ReplyKeyboardRemove())
+            update.message.reply_text('Спасибо, регистрация окончена, скоро свяжусь с Вами 🤖\n\n'
+                                      'Жду Вас на <b>офлайн формате 12 июня</b> или <b>онлайн формате 13 июня</b>\n',
+                                      reply_markup=ReplyKeyboardRemove(),
+                                      parse_mode="HTML")
             logger.info("User %s finished registration", user.first_name)
         else:
             update.message.reply_text('К сожалению, регистрация не окончена, '
