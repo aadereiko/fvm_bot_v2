@@ -5,11 +5,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def format_users_list(users):
+def format_users_list(users, fields):
     result = ""
     i = 0
 
-    fields = ["name", "username", "reg_time"]
     try:
         for user in users:
             i += 1

@@ -197,7 +197,7 @@ def is_paper(update: Update, context: CallbackContext) -> int:
 
     context.user_data['is_paper'] = update.message.text == "Да"
 
-    reply_keyboard = [['Да', 'Нет']]
+    reply_keyboard = [['Да']]
     update.message.reply_text('Знаете ли Вы, что в режиме оффлайн можно участвовать только в Минске?' + stop_msg,
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
                                                                resize_keyboard=True),
@@ -210,7 +210,7 @@ def town(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     logger.info("town for %s is %s", user.first_name, update.message.text)
 
-    context.user_data['town'] = update.message.text == "Да"
+    context.user_data['town'] = update.message.text
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Всю написанную здесь информацию Вы можете изменить позже, я дам об этом знать.\n\n'

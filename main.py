@@ -12,7 +12,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-msgs_keyboard = [['Регистрация'], ['Сайт', 'Инст', 'Телеграм', 'ВК'],  ['Ошибка / Вопрос']]
+msgs_keyboard = [['Регистрация'], ['Инст', 'Телеграм', 'ВК'],  ['Ошибка / Вопрос']]
 
 
 def start(update: Update, _: CallbackContext) -> int:

@@ -93,7 +93,7 @@ def run_bot() -> None:
             reg.OCCUPATION: [MessageHandler(Filters.text & ~Filters.command, reg.occupation)],
             reg.HOW_MET: [MessageHandler(Filters.text & ~Filters.command, reg.how_met)],
             reg.IS_PAPER: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.is_paper)],
-            reg.TOWN: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.town)],
+            reg.TOWN: [MessageHandler(Filters.regex('^(Да)$'), reg.town)],
             reg.RIGHTS: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.rights)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
