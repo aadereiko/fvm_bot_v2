@@ -80,7 +80,7 @@ def run_bot() -> None:
     users_handler_cmd = CommandHandler('users', users.users_cmd)
 
     conv_handler = ConversationHandler(
-        entry_points=[MessageHandler(Filters.regex('^Регистрация$'), reg.register)],
+        entry_points=[MessageHandler(Filters.regex('^(Регистрация|/reg)$'), reg.register)],
         states={
             reg.NAME: [MessageHandler(Filters.text & ~Filters.command, reg.name)],
             # reg.IS_ONLINE: [MessageHandler(Filters.regex('^(Онлайн|Офлайн)$'), reg.is_online)],
