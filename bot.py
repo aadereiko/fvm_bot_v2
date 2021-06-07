@@ -12,6 +12,7 @@ bot.
 """
 import logging
 
+import msg
 import settings
 from settings import fvm_token
 import main
@@ -26,6 +27,7 @@ from telegram.ext import (
     Filters,
     ConversationHandler,
     CallbackContext,
+    CallbackQueryHandler
 )
 
 # Enable logging
@@ -81,7 +83,7 @@ def run_bot() -> None:
         entry_points=[MessageHandler(Filters.regex('^Регистрация$'), reg.register)],
         states={
             reg.NAME: [MessageHandler(Filters.text & ~Filters.command, reg.name)],
-            reg.IS_ONLINE: [MessageHandler(Filters.regex('^(Онлайн|Офлайн)$'), reg.is_online)],
+            # reg.IS_ONLINE: [MessageHandler(Filters.regex('^(Онлайн|Офлайн)$'), reg.is_online)],
             reg.TRANSPORT: [MessageHandler(Filters.regex('^(Велосипед|Самокат|Электросамокат|Ролики|Скейтборд|Бег)$'), reg.transport)],
             reg.PHONE: [
                 MessageHandler(Filters.text & ~Filters.command, reg.phone),
@@ -93,12 +95,18 @@ def run_bot() -> None:
             reg.OCCUPATION: [MessageHandler(Filters.text & ~Filters.command, reg.occupation)],
             reg.HOW_MET: [MessageHandler(Filters.text & ~Filters.command, reg.how_met)],
             reg.IS_PAPER: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.is_paper)],
-            reg.TOWN: [MessageHandler(Filters.regex('^(Да)$'), reg.town)],
+            # reg.TOWN: [MessageHandler(Filters.regex('^(Да)$'), reg.town)],
             reg.RIGHTS: [MessageHandler(Filters.regex('^(Да|Нет)$'), reg.rights)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
 
+    # msg_handler_cmd = CommandHandler('msg', msg.msg_cmd)
+    # msg_handler = ConversationHandler(
+    #     entry_points=[msg_handler_cmd],
+    #     states=msg.msg_states,
+    #     fallbacks=[CommandHandler('cancel', cancel)])
+    # dispatcher.add_handler(msg_handler)
     dispatcher.add_handler(start_handler)
 
     dispatcher.add_handler(inst_handler_msg)
@@ -121,9 +129,7 @@ def run_bot() -> None:
     # should be last one
     dispatcher.add_handler(unknown_handler)
 
-
     # Start the Bot
-
     if settings.is_local:
         updater.start_polling()
     else:

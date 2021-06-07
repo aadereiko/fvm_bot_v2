@@ -14,7 +14,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-NAME, IS_ONLINE, TRANSPORT, PHONE, AGE, HAS_PARTICIPATED, IS_PHONE, OCCUPATION, HOW_MET, IS_PAPER, TOWN, RIGHTS = range(12)
+NAME, TRANSPORT, PHONE, AGE, HAS_PARTICIPATED, IS_PHONE, OCCUPATION, HOW_MET, IS_PAPER, TOWN, RIGHTS = range(11)
 
 options_msg = "\n\n" \
               "<i>На данный вопрос Вы должны <b>выбрать</b> ответ из ниже перечисленных вариантов. " \
@@ -48,41 +48,48 @@ def register(update: Update, context: CallbackContext) -> int:
 
 def name(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
-    reply_keyboard = [['Онлайн', 'Офлайн']]
+    reply_keyboard = [['Велосипед', 'Самокат', 'Электросамокат'], ['Ролики', 'Скейтборд', 'Бег']]
     logger.info("Name of %s: %s", user.first_name, update.message.text)
 
     context.user_data['name'] = update.message.text
 
     update.message.reply_text(
-        'Приятно познакомиться! Теперь, пожалуйста, выберите в каком формате Вы планируете участвовать?' + options_msg + stop_msg,
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
-                                         resize_keyboard=True),
-        parse_mode = "HTML"
+            'Прекрасно!\n'
+            'А сейчас можете выбрать транспорт, на котором Вы планируете принимать участие' + options_msg + stop_msg,
+            parse_mode="HTML",
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True),
     )
 
-    return IS_ONLINE
-
-
-def is_online(update: Update, context: CallbackContext) -> int:
-    user = update.message.from_user
-    logger.info("Is online of %s: %s", user.first_name, update.message.text)
-    reply_keyboard = [['Велосипед', 'Самокат', 'Электросамокат'], ['Ролики', 'Скейтборд', 'Бег']]
-
-    context.user_data['is_online'] = update.message.text == "Онлайн"
-
-    update.message.reply_text(
-        'Прекрасно!\n'
-        'А сейчас можете выбрать транспорт, на котором Вы планируете принимать участие' + options_msg + stop_msg,
-        parse_mode="HTML",
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True),
-    )
+    # update.message.reply_text(
+    #     'Приятно познакомиться! Теперь, пожалуйста, выберите в каком формате Вы планируете участвовать?' + options_msg + stop_msg,
+    #     reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+    #                                      resize_keyboard=True),
+    #     parse_mode = "HTML"
+    # )
 
     return TRANSPORT
 
 
+# def is_online(update: Update, context: CallbackContext) -> int:
+#     user = update.message.from_user
+#     logger.info("Is online of %s: %s", user.first_name, update.message.text)
+#     reply_keyboard = [['Велосипед', 'Самокат', 'Электросамокат'], ['Ролики', 'Скейтборд', 'Бег']]
+#
+#     context.user_data['is_online'] = update.message.text == "Онлайн"
+#
+#     update.message.reply_text(
+#         'Прекрасно!\n'
+#         'А сейчас можете выбрать транспорт, на котором Вы планируете принимать участие' + options_msg + stop_msg,
+#         parse_mode="HTML",
+#         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True),
+#     )
+#
+#     return TRANSPORT
+
+
 def transport(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
-    logger.info("Is online of %s: %s", user.first_name, update.message.text)
+    logger.info("[REG]: Name of %s: %s", user.first_name, update.message.text)
 
     context.user_data['transport'] = update.message.text
 
@@ -197,20 +204,11 @@ def is_paper(update: Update, context: CallbackContext) -> int:
 
     context.user_data['is_paper'] = update.message.text == "Да"
 
-    reply_keyboard = [['Да']]
-    update.message.reply_text('Знаете ли Вы, что в режиме офлайн можно участвовать только в Минске?' + stop_msg,
-                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
-                                                               resize_keyboard=True),
-                              parse_mode="HTML")
-
-    return TOWN
-
-
-def town(update: Update, context: CallbackContext) -> int:
-    user = update.message.from_user
-    logger.info("town for %s is %s", user.first_name, update.message.text)
-
-    context.user_data['town'] = update.message.text
+    # reply_keyboard = [['Да']]
+    # update.message.reply_text('Знаете ли Вы, что в режиме офлайн можно участвовать только в Минске?' + stop_msg,
+    #                           reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+    #                                                            resize_keyboard=True),
+    #                           parse_mode="HTML")
 
     reply_keyboard = [['Да', 'Нет']]
     update.message.reply_text('Всю написанную здесь информацию Вы можете изменить позже, я дам об этом знать.\n\n'
@@ -225,6 +223,25 @@ def town(update: Update, context: CallbackContext) -> int:
     return RIGHTS
 
 
+# def town(update: Update, context: CallbackContext) -> int:
+#     user = update.message.from_user
+#     logger.info("town for %s is %s", user.first_name, update.message.text)
+#
+#     context.user_data['town'] = update.message.text
+#
+#     reply_keyboard = [['Да', 'Нет']]
+#     update.message.reply_text('Всю написанную здесь информацию Вы можете изменить позже, я дам об этом знать.\n\n'
+#                               'Нажимая кнопку <b>Да</b>, Вы подтверждаете, что согласны с нашими правилами:\n'
+#                               '1. Участник обязан знать правила дорожного движения и соблюдать их.\n'
+#                               '2. Участник сам несет ответственность за себя и свое здоровье.\n\n'
+#                               'Завершить регистрацию?' + options_msg + stop_msg,
+#                               parse_mode="HTML",
+#                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,
+#                                                                resize_keyboard=True))
+#
+#     return RIGHTS
+
+
 def rights(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     logger.info("user %s is agreed with rights %s", user.first_name, update.message.text)
@@ -236,7 +253,7 @@ def rights(update: Update, context: CallbackContext) -> int:
             settings.bot.send_message(chat_id=settings.marika_id, text=f"💪 Пользователь <b>{context.user_data['name']}</b>"
                                                             f" успешно зарегистрирован!", parse_mode="HTML")
             update.message.reply_text('Спасибо, регистрация окончена, скоро свяжусь с Вами 🤖\n\n'
-                                      'Жду Вас на <b>офлайн формате 12 июня</b> или <b>онлайн формате 13 июня</b>\n',
+                                      'Жду Вас на <b>онлайн формате 26 или 27 июня</b>\n',
                                       reply_markup=ReplyKeyboardRemove(),
                                       parse_mode="HTML")
             logger.info("User %s finished registration", user.first_name)

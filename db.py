@@ -4,6 +4,8 @@ import pymongo
 import logging
 from datetime import datetime
 
+import settings
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
@@ -22,7 +24,6 @@ def write_user_to_db(user):
     try:
         db.users.insert_one({
             "name": user["name"],
-            "is_online": user["is_online"],
             "phone": user["phone"],
             "age": user["age"],
             "transport": user["transport"],
@@ -31,10 +32,11 @@ def write_user_to_db(user):
             "occupation": user["occupation"],
             "how_met": user["how_met"],
             "is_paper": user["is_paper"],
-            "town": user["town"],
+            # "town": user["town"],
             "user_id": user["user_id"],
             "username": user["username"],
             "tg_name": user["tg_name"],
+            "lead_id": settings.ader_id,
             "reg_time": datetime.now(),
         })
     except Exception as e:
@@ -50,3 +52,22 @@ def get_all_users():
     except Exception as e:
         logging.error(e)
         return False
+
+
+def get_users(filters):
+    try:
+        users = db.users.find(filters if filters else {})
+        return users
+    except Exception as e:
+        logging.error(e)
+        return []
+
+
+def get_user(filters):
+    try:
+        print(filters)
+        user = db.users.find_one(filters if filters else {})
+        return user
+    except Exception as e:
+        logging.error(e)
+        return {}
